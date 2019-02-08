@@ -17,25 +17,38 @@ class HangpersonGame
   
   def initialize(word)
     @word = word
-    @guesses = ''
-    @wrong_guesses = 0
-    @word_with_guesses = '-' * @word.length
+    @guesses = ""
+    @wrong_guesses = ""
+    @word_with_guesses = "-" * @word.length
     return self
   end
 
-  def self.guess(letter)
-    if guesses.include? letter
-      return
+  def guess(letter)
+    if letter == nil or letter == ""
+      raise(ArgumentError, "Must guess a letter.")
+    end
+    letter = letter.downcase
+    if guesses.include? letter or wrong_guesses.include? letter
+      return false
     end
     if @word.include? letter 
       word_with_guesses[@word.index(letter)] = letter
+      setguesses(letter)
     else 
-      wrong_guesses += letter
+      setwrong(letter)
     end
-    guesses += letter
+    return true
   end
 
-  def self.check_win_or_lose() 
+  def setguesses(letter)
+    self.guesses += letter unless guesses == nil else guesses = letter
+  end
+
+  def setwrong(letter)
+    self.wrong_guesses += letter unless wrong_guesses == nil else wrong_guesses = letter
+  end
+
+  def check_win_or_lose() 
     if @word_with_guesses == @word 
       return :win
     elsif @wrong_guesses >= 7
