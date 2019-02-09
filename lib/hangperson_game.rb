@@ -24,15 +24,18 @@ class HangpersonGame
   end
 
   def guess(letter)
-    if letter == nil or letter == ""
-      raise(ArgumentError, "Must guess a letter.")
+    if letter == nil or letter == "" or !(letter =~ /[A-Za-z]/)
+      raise(ArgumentError, "Must guess a single letter.")
     end
     letter = letter.downcase
     if guesses.include? letter or wrong_guesses.include? letter
       return false
     end
     if @word.include? letter 
-      word_with_guesses[@word.index(letter)] = letter
+      letterindices = (0 ... word.length).find_all { |i| word[i] == letter }
+      letterindices.each do |index|
+        word_with_guesses[index] = letter
+      end
       setguesses(letter)
     else 
       setwrong(letter)
@@ -51,7 +54,7 @@ class HangpersonGame
   def check_win_or_lose() 
     if @word_with_guesses == @word 
       return :win
-    elsif @wrong_guesses >= 7
+    elsif @wrong_guesses.length >= 7
       return :lose
     else
       return :play
