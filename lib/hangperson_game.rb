@@ -25,7 +25,7 @@ class HangpersonGame
 
   def guess(letter)
     if letter == nil or letter == "" or !(letter =~ /[A-Za-z]/)
-      raise(ArgumentError, "Must guess a single letter.")
+      raise(ArgumentError, "Invalid guess.")
     end
     letter = letter.downcase
     if guesses.include? letter or wrong_guesses.include? letter
